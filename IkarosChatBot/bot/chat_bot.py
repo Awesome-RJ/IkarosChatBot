@@ -4,7 +4,6 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from coffeehouse.lydia import LydiaAI
 from coffeehouse.api import API
 from coffeehouse.exception import CoffeeHouseError as CFError
-from IkarosChatBot.bot.errors import capture_err
 
 from IkarosChatBot import app, LOGGER, CF_API_KEY, NAME
 import IkarosChatBot.bot.database.IkarosChatBot_db as db
@@ -14,31 +13,55 @@ CoffeeHouseAPI = API(CF_API_KEY)
 api_client = LydiaAI(CoffeeHouseAPI)
 
 
-@app.on_message(~filters.me & filters.command('start', prefixes='/'), group=8)
-@capture_err
-async def start(_, message):
-   if message.chat.type == "private":
-     if len(message.text.split()) >= 2:
-       suckz = message.text.split()[1]
-       if suckz == "help":
-          buttons =[
-                        InlineKeyboardButton(
-                             text="Updates Channel",
-                             url="https://t.me/Techno_Ocean")
-                     ]
-          await message.reply_text('Machine Learning Chat Bot that can talk about any topic in any language. Powered by @Yuki_Network from @Techno_Ocean', reply_markup=InlineKeyboardMarkup(buttons))
-     else:
-       photo = "https://telegra.ph/file/19dad86d7b1009f1d6911.jpg"
-       buttons =    
-                        InlineKeyboardButton(
-                             text="Updates Channel",
-                             url="https://t.me/Techno_Ocean")
-                     ]
-       await message.reply_photo(photo,
-         caption='Machine Learning Chat Bot that can talk about any topic in any language. Powered by @Yuki_Network from @Techno_Ocean',
-         reply_markup=InlineKeyboardMarkup(buttons))
-   else:
-       await message.reply_text("Hi SweetHeart, I'm Ikaros.")
+prvt_message = '''
+Ikaros - v0.1\n Using Coffeehouse AI from @Intellivoid\n Click /help to know more :D
+'''
+
+grp_message = '''
+Hy SweetHeart, I'm Ikaros
+'''
+
+@app.on_message(filters.command(["start"], prefixes=["/", "!"]))
+async def start(client, message):
+    self = await app.get_me()
+    busername = self.username
+    if message.chat.type != "private":
+        await message.reply_text(grp_message)
+        return
+    else:
+        buttons = [[InlineKeyboardButton("Managed by", url="https://t.me/Awesome_RJ"),
+                    ]]
+        await message.reply_text(prvt_message, reply_markup=InlineKeyboardMarkup(buttons))
+
+
+@app.on_message(filters.command("help"))
+async def help_command(client, message):
+    help_text = """
+    **Misaki is a IkarosChatBot which uses @Intellivoid's Coffeehouse AI.**\n\n
+Coffeehouse Lydia AI can actively chat and learn from you, it gets better everytime.
+"""
+    self = await app.get_me()
+    busername = self.username
+
+    if message.chat.type != "private":
+        buttons = InlineKeyboardMarkup(
+            [[InlineKeyboardButton(text="Click here",
+                url=f"t.me/{busername}?start=help")]])
+        await message.reply("Contact me in PM",
+                            reply_markup=buttons)
+    else:
+        buttons = [[InlineKeyboardButton("Learn more", url="https://coffeehouse.intellivoid.net"),
+                    InlineKeyboardButton('Docs', url=f"https://docs.intellivoid.net")]]
+        await message.reply_text(help_text, reply_markup=InlineKeyboardMarkup(buttons))
+
+def check_message(client, msg):
+    reply_msg = msg.reply_to_message
+    if NAME.lower() in msg.text.lower():
+        return True
+    if reply_msg and reply_msg.from_user is not None:
+        if reply_msg.from_user.is_self:
+            return True
+    return False
 
 
 @app.on_message(filters.text & filters.group)
