@@ -29,7 +29,7 @@ async def start(client, message):
         await message.reply_text(grp_message)
         return
     else:
-        buttons = [[InlineKeyboardButton("Managed by", url="https://t.me/awsome_rj"),
+        buttons = [[InlineKeyboardButton("Managed by", url="https://t.me/Awesome_RJ"),
                     ]]
         await message.reply_text(prvt_message, reply_markup=InlineKeyboardMarkup(buttons))
 
