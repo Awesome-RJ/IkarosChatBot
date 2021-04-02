@@ -5,8 +5,8 @@ from coffeehouse.lydia import LydiaAI
 from coffeehouse.api import API
 from coffeehouse.exception import CoffeeHouseError as CFError
 
-from chatbot import app, LOGGER, CF_API_KEY, NAME
-import chatbot.bot.database.chatbot_db as db
+from IkarosChatBot import app, LOGGER, CF_API_KEY, NAME
+import IkarosChatBot.bot.database.IkarosChatBot_db as db
 
 
 CoffeeHouseAPI = API(CF_API_KEY)
@@ -14,30 +14,17 @@ api_client = LydiaAI(CoffeeHouseAPI)
 
 
 prvt_message = '''
-Misaki - v0.1\n Using Coffeehouse AI from @Intellivoid\n Click /help to know more :D
+Ikaros - v0.1\n Using Coffeehouse AI from @Intellivoid\n Click /help to know more :D
 '''
 
 grp_message = '''
 Hi, I'm Misaki
 '''
 
-@app.on_message(filters.command(["start"], prefixes=["/", "!"]))
-async def start(client, message):
-    self = await app.get_me()
-    busername = self.username
-    if message.chat.type != "private":
-        await message.reply_text(grp_message)
-        return
-    else:
-        buttons = [[InlineKeyboardButton("Managed by", url="https://t.me/dank_as_fuck"),
-                    ]]
-        await message.reply_text(prvt_message, reply_markup=InlineKeyboardMarkup(buttons))
-
-
 @app.on_message(filters.command("help"))
 async def help_command(client, message):
     help_text = """
-    **Misaki is a chatbot which uses @Intellivoid's Coffeehouse AI.**\n\n
+    **Misaki is a IkarosChatBot which uses @Intellivoid's Coffeehouse AI.**\n\n
 Coffeehouse Lydia AI can actively chat and learn from you, it gets better everytime.
 """
     self = await app.get_me()
@@ -65,7 +52,7 @@ def check_message(client, msg):
 
 
 @app.on_message(filters.text & filters.group)
-def chatbot_grp(client, message):
+def IkarosChatBot_grp(client, message):
     msg = message
     if not check_message(client, msg):
         return
@@ -96,7 +83,7 @@ def chatbot_grp(client, message):
 
 
 @app.on_message(filters.text & filters.private)
-def chatbot_pvt(client, message):
+def IkarosChatBot_pvt(client, message):
     msg = message
     user_id = msg.from_user.id
 

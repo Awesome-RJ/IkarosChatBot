@@ -2,11 +2,11 @@ import threading
 
 from sqlalchemy import Column, String, Integer
 
-from chatbot.bot.database import BASE, SESSION
+from IkarosChatBot.bot.database import BASE, SESSION
 
 
-class Chatbot(BASE):
-    __tablename__ = "chatbot"
+class IkarosChatBot(BASE):
+    __tablename__ = "IkarosChatBot"
     user_id = Column(Integer, primary_key=True)
     ses_id = Column(String(64))
     expires = Column(String(10))
@@ -16,7 +16,7 @@ class Chatbot(BASE):
         self.ses_id = ses_id
         self.expires = expires
         
-Chatbot.__table__.create(checkfirst=True)
+IkarosChatBot.__table__.create(checkfirst=True)
 
 INSERTION_LOCK = threading.RLock()
 USERS = set()
@@ -24,7 +24,7 @@ USERS = set()
 
 def is_user(user_id):
     try:
-        user = SESSION.query(Chatbot).get(int(user_id))
+        user = SESSION.query(IkarosChatBot).get(int(user_id))
         if user:
             return True
         else:
@@ -35,9 +35,9 @@ def is_user(user_id):
         
 def set_ses(user_id, ses_id, expires):
     with INSERTION_LOCK:
-        autochat = SESSION.query(Chatbot).get(int(user_id))
+        autochat = SESSION.query(IkarosChatBot).get(int(user_id))
         if not autochat:
-            autochat = Chatbot(int(user_id), str(ses_id), str(expires))
+            autochat = IkarosChatBot(int(user_id), str(ses_id), str(expires))
         else:
             autochat.ses_id = str(ses_id)
             autochat.expires = str(expires)
@@ -48,7 +48,7 @@ def set_ses(user_id, ses_id, expires):
             
             
 def get_ses(user_id):
-    autochat = SESSION.query(Chatbot).get(int(user_id))
+    autochat = SESSION.query(IkarosChatBot).get(int(user_id))
     sesh = ""
     exp = ""
     if autochat:
@@ -61,7 +61,7 @@ def get_ses(user_id):
     
 def rem_user(user_id):
     with INSERTION_LOCK:
-        autochat = SESSION.query(Chatbot).get(int(user_id))
+        autochat = SESSION.query(IkarosChatBot).get(int(user_id))
         if autochat:
             SESSION.delete(autochat)
             
@@ -72,7 +72,7 @@ def rem_user(user_id):
 def __load_userid_list():
     global USERS
     try:
-        USERS = {int(x.user_id) for x in SESSION.query(Chatbot).all()}
+        USERS = {int(x.user_id) for x in SESSION.query(IkarosChatBot).all()}
     finally:
         SESSION.close()
         

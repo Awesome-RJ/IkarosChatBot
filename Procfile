@@ -1,1 +1,1 @@
-worker: python3 -m chatbot
+worker: python3 -m IkarosChatBot

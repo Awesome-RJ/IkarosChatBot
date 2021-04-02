@@ -1,12 +1,12 @@
 # About
 A fun telegram userbot written in python3 using [Intellivoid](https://github.com/intellivoid)'s Coffeehouse API.
-Originally written by [this person](https://t.me/TheRealPhoenix)! Reworked by t.me/dank_as_fuck (misaki@eagleunion.tk)
+Originally written by [this person](https://t.me/TheRealPhoenix)! Reworked by t.me/awsome_rj
 ## Installation
 Open up your terminal and run these commands.
 
-• ```git clone https://github.com/Dank-del/MisakiChatbot.git```
+• ```git clone https://github.com/Dank-del/IkarosChatBot.git```
 
-• ```cd MisakiChatbot```
+• ```cd IkarosChatBot```
 
 • ```pip install -r requirements.txt```
 

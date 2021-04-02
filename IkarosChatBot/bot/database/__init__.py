@@ -2,7 +2,7 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, scoped_session
 
-from chatbot import DATABASE_URL
+from IkarosChatBot import DATABASE_URL
 
 
 def start() -> scoped_session:
