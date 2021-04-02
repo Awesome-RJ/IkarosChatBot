@@ -14,7 +14,7 @@ else:
 IKAROS_IMG= "https://telegra.ph/file/be7b7ec251dd14d7d2cd8.png"
 IKAROSPINGIMG = "http://pa1.narvii.com/5734/0f0347710cef8bfcaf95528a61190b28cabe45a0_hq.gif"
 
-if:
+if
             first_name = update.effective_user.first_name
             update.effective_message.reply_photo(
                 IKAROS_IMG,
