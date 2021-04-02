@@ -18,8 +18,21 @@ Ikaros - v0.1\n Using Coffeehouse AI from @Intellivoid\n Click /help to know mor
 '''
 
 grp_message = '''
-Hi, I'm Misaki
+Hy SweetHeart, I'm Ikaros
 '''
+
+@app.on_message(filters.command(["start"], prefixes=["/", "!"]))
+async def start(client, message):
+    self = await app.get_me()
+    busername = self.username
+    if message.chat.type != "private":
+        await message.reply_text(grp_message)
+        return
+    else:
+        buttons = [[InlineKeyboardButton("Managed by", url="https://t.me/awsome_rj"),
+                    ]]
+        await message.reply_text(prvt_message, reply_markup=InlineKeyboardMarkup(buttons))
+
 
 @app.on_message(filters.command("help"))
 async def help_command(client, message):
