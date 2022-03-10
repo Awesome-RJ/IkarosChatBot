@@ -36,10 +36,6 @@ async def start(client, message):
 
 @app.on_message(filters.command("help"))
 async def help_command(client, message):
-    help_text = """
-    **Misaki is a IkarosChatBot which uses @Intellivoid's Coffeehouse AI.**\n\n
-Coffeehouse Lydia AI can actively chat and learn from you, it gets better everytime.
-"""
     self = await app.get_me()
     busername = self.username
 
@@ -50,17 +46,33 @@ Coffeehouse Lydia AI can actively chat and learn from you, it gets better everyt
         await message.reply("Contact me in PM",
                             reply_markup=buttons)
     else:
-        buttons = [[InlineKeyboardButton("Learn more", url="https://coffeehouse.intellivoid.net"),
-                    InlineKeyboardButton('Docs', url=f"https://docs.intellivoid.net")]]
+        buttons = [
+            [
+                InlineKeyboardButton(
+                    "Learn more", url="https://coffeehouse.intellivoid.net"
+                ),
+                InlineKeyboardButton(
+                    'Docs', url="https://docs.intellivoid.net"
+                ),
+            ]
+        ]
+
+        help_text = """
+    **Misaki is a IkarosChatBot which uses @Intellivoid's Coffeehouse AI.**\n\n
+Coffeehouse Lydia AI can actively chat and learn from you, it gets better everytime.
+"""
         await message.reply_text(help_text, reply_markup=InlineKeyboardMarkup(buttons))
 
 def check_message(client, msg):
     reply_msg = msg.reply_to_message
     if NAME.lower() in msg.text.lower():
         return True
-    if reply_msg and reply_msg.from_user is not None:
-        if reply_msg.from_user.is_self:
-            return True
+    if (
+        reply_msg
+        and reply_msg.from_user is not None
+        and reply_msg.from_user.is_self
+    ):
+        return True
     return False
 
 
@@ -71,7 +83,7 @@ def IkarosChatBot_grp(client, message):
         return
     user_id = msg.from_user.id
 
-    if not user_id in db.USERS:
+    if user_id not in db.USERS:
         ses = api_client.create_session()
         ses_id = str(ses.id)
         expires = str(ses.expires)
@@ -86,7 +98,7 @@ def IkarosChatBot_grp(client, message):
         expires = str(ses.expires)
         db.set_ses(user_id, ses_id, expires)
         sesh, exp = ses_id, expires
-        
+
     try:
         app.send_chat_action(msg.chat.id, "typing")
         response = api_client.think_thought(sesh, query)
@@ -100,7 +112,7 @@ def IkarosChatBot_pvt(client, message):
     msg = message
     user_id = msg.from_user.id
 
-    if not user_id in db.USERS:
+    if user_id not in db.USERS:
         ses = api_client.create_session()
         ses_id = str(ses.id)
         expires = str(ses.expires)
