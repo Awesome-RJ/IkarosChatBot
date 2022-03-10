@@ -25,10 +25,7 @@ USERS = set()
 def is_user(user_id):
     try:
         user = SESSION.query(IkarosChatBot).get(int(user_id))
-        if user:
-            return True
-        else:
-            return False
+        return bool(user)
     finally:
         SESSION.close()
         
@@ -61,10 +58,9 @@ def get_ses(user_id):
     
 def rem_user(user_id):
     with INSERTION_LOCK:
-        autochat = SESSION.query(IkarosChatBot).get(int(user_id))
-        if autochat:
+        if autochat := SESSION.query(IkarosChatBot).get(int(user_id)):
             SESSION.delete(autochat)
-            
+
         SESSION.commit()
         __load_userid_list()
         
